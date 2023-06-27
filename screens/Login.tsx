@@ -1,34 +1,30 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {StackActions} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View} from 'react-native';
 import Button from '../componentes/Button';
 import Input from '../componentes/Input';
 import {IUser} from '../types';
-import { useNavigation } from '@react-navigation/native';
+import {getData} from '../helpers/storage';
 
-const Login:React.FC<any> = ({navigation}) => {
+const Login: React.FC<any> = ({navigation}) => {
   const [username, setUserName] = useState<string>('');
-// const navigation = useNavigation()
   const onLogin = async () => {
     let id = username.toLocaleLowerCase().trim().replace(/\s/g, '');
     let user = {
-        id,
+      id,
       username,
     };
-    let users: IUser[] = [];
-    const usersString: string | null = await AsyncStorage.getItem('users');
-    if (usersString) {
-      users = JSON.parse(usersString);
-      const userExist = users.find(item => item.id === user.id);
-      if (!userExist) {
-        users.push(user);
-      }
+    let users: IUser[] = await getData('users');
+    const userExist = users.find(item => item.id === user.id);
+    if (!userExist) {
+      users.push(user);
     } else {
       users.push(user);
     }
     AsyncStorage.setItem('users', JSON.stringify(users));
     AsyncStorage.setItem('currentUser', JSON.stringify(user));
-    navigation.navigate('Home')
+    navigation.dispatch(StackActions.replace('Home'));
   };
 
   return (
