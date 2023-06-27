@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
-import {IExpense, IUser} from '../types';
+import {IExpense, IUser} from '../../types';
 interface IExpenseProps extends IExpense {
 
 }
