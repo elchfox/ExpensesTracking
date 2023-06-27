@@ -5,6 +5,16 @@ export const getListOfExpenses = async () => {
   let expenses: IExpense[] = await getData('expenses');
   return expenses ? expenses : [];
 };
+export const getExpensesAndAllInfo = async () => {
+  let expenses = await getExpenses()
+  let totalExpenses = expenses.reduce((prev, current) => 
+  {
+    prev += current.amount
+    return prev
+  }
+    , 0)
+  return {totalExpenses,expenses}
+};
 export const getExpenses = async () => {
   let expenses: IExpense[] = await getListOfExpenses();
   let user: IUser = await getData('currentUser');

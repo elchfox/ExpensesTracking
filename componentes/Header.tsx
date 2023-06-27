@@ -17,7 +17,7 @@ const Header: React.FC<any> = props => {
       setUsername(user.username.toLocaleUpperCase());
     }
   };
-  
+
   return (
     <View>
       <Text>{username}</Text>

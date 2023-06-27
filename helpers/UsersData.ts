@@ -1,7 +1,9 @@
-import { IUser } from '../types';
-import { getData } from './storage';
+import { getData, removeData } from './storage';
 
 export const checkUserExist = async () => {
-  let user: IUser = await getData('currentUser');
-  return user.id ? true : false
+  let user = await getData('currentUser');
+  return user?.id ? true : false
+};
+export const userLogout = async () => {
+  removeData('currentUser');
 };

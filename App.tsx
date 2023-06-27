@@ -39,7 +39,8 @@ function App({}): JSX.Element {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{headerTitle: props => <Header {...props} />}}
+          options={{ headerTitle: props => <Header {...props} /> }}
+          
         />
       </Stack.Navigator>
     </NavigationContainer>

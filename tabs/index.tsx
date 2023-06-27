@@ -13,21 +13,19 @@ import FormExpense from '../componentes/Expense/FormExpense';
 const Tab = createBottomTabNavigator();
 const Tabs: React.FC<any> = ({navigation}) => {
   return (
-    <Tab.Navigator tabBar={props => <BottomTabBar {...props} />}>
+    <Tab.Navigator screenOptions={{headerShown: false}}>
       <Tab.Screen
         name="Home"
         component={Main}
         options={{
-          tabBarButton: props => <TabBarCustomButton value="Home" {...props} />
+          tabBarButton: props => <TabBarCustomButton value="Home" {...props} />,
         }}
       />
       <Tab.Screen
         name="FormExpense"
         component={FormExpense}
         options={{
-          tabBarButton: props => (
-            <FloatButton value="Profile" {...props}/>
-          ),
+          tabBarButton: props => <FloatButton value="Profile" {...props} />,
         }}
       />
       <Tab.Screen
@@ -35,7 +33,7 @@ const Tabs: React.FC<any> = ({navigation}) => {
         component={Profile}
         options={{
           tabBarButton: props => (
-            <TabBarCustomButton value="Profile" {...props}  />
+            <TabBarCustomButton value="Profile" {...props} />
           ),
         }}
       />

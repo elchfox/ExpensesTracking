@@ -10,3 +10,6 @@ export const getData = async (name: string) => {
 export const setData = async (name: string, value: any) => {
   AsyncStorage.setItem(name, JSON.stringify(value));
 };
+export const removeData = async (name: string) => {
+  AsyncStorage.removeItem(name);
+};

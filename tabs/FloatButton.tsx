@@ -34,7 +34,7 @@ const FloatButton: React.FC<ITabBarCustomButton> = ({
           lineHeight:50,
           color: 'white',
           fontSize: 50,
-          backgroundColor: 'red',
+          
           textAlign: 'center',
           alignSelf: 'center',
           justifyContent: 'center',
