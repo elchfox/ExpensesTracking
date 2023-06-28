@@ -9,7 +9,7 @@ const  Input: React.FC<TextInputProps> =  (props)=>  {
         borderBottomWidth: 1,
         borderBottomColor: '#BFBFBF',
         padding: 4,
-        width: '100%',
+        // flex:1
         
       },props.style]}
     />

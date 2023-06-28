@@ -18,3 +18,11 @@ export interface IFilterObj {
   fromDate?: Date;
   toDate?: Date;
 }
+
+
+export interface IInfoAboutExpense {
+    maxDate?: Date;
+    minDate?: Date;
+    totalExpenses: number;
+    expenses: IExpense[];
+  }

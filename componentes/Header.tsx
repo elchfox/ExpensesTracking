@@ -19,8 +19,8 @@ const Header: React.FC<any> = props => {
   };
 
   return (
-    <View>
-      <Text>{username}</Text>
+    <View style={{justifyContent:"center",alignItems:'center',flex:1,backgroundColor:"red"}}>
+      <Text style={{textAlign:"center",fontWeight:"bold"}}>{username}</Text>
     </View>
   );
 };

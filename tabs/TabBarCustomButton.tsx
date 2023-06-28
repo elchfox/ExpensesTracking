@@ -20,7 +20,7 @@ const TabBarCustomButton: React.FC<ITabBarCustomButton> = ({
         justifyContent: 'center',
         alignItems: 'center',
         height: '100%',
-        paddingVertical: 5,
+        paddingVertical: 15,
         backgroundColor: 'white',
       }}
       activeOpacity={isSelected ? 0.9 : 1}

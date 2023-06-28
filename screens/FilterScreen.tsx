@@ -1,40 +1,31 @@
-import React, {useEffect, useState} from 'react';
-import {Modal, Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { Modal, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Input from '../componentes/Input';
-import {getMinMaxDate} from '../helpers/ExpensesData';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Button from '../componentes/Button';
-import {IExpense, IFilterObj} from '../types';
+import { IFilterObj } from '../types';
 const initialData = {};
 interface IFilter {
+  minDate?: Date;
+  maxDate?: Date;
+  filterObject: IFilterObj;
   onFilter: (data: IFilterObj) => void;
   onClose: () => void;
 }
 const FilterScreen: React.FC<IFilter> = props => {
-  const [expenses, setExpenses] = useState<IExpense[]>();
-  const [typeDatePicker, setTypeDatePicker] = useState<'from' | 'to' | null>(
-    null,
+  const {maxDate, minDate} = props;
+  const [typeDatePicker, setTypeDatePicker] = useState<
+    'fromDate' | 'toDate' | null
+  >(null);
+
+  let [filterObject, setFilterObject] = useState<IFilterObj>(
+    props.filterObject,
   );
 
-  let [filterObject, setFilterObject] = useState<IFilterObj>(initialData);
-
-  useEffect(() => {
-    init();
-  }, []);
-
-  const init = async () => {
-    let {maxDate, minDate} = await getMinMaxDate();
-    setFilterObject({
-      ...filterObject,
-      fromDate: minDate,
-      toDate: maxDate,
-    });
-  };
-
-  const onChangeField = async (name: string, value: string | number) => {
+  const onChangeField = async (name: string, value: string | number | Date) => {
     setFilterObject({
       ...filterObject,
       [name]: value,
@@ -47,18 +38,7 @@ const FilterScreen: React.FC<IFilter> = props => {
   ) => {
     let selectedDate = date || new Date();
     setTypeDatePicker(null);
-    setFilterObject({
-      ...filterObject,
-      [type]: selectedDate,
-    });
-  };
-
-  const onChangeAmount = (amount: number, type: 'minAmount' | 'maxAmount') => {
-    setFilterObject({
-      ...filterObject,
-
-      [type]: amount,
-    });
+    onChangeField(type, selectedDate);
   };
 
   const onClose = () => {
@@ -109,18 +89,25 @@ const FilterScreen: React.FC<IFilter> = props => {
             placeholder="Title"
             value={filterObject.title}
           />
-          <View>
+          <View
+            style={{
+              gap: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
             <Input
-              onChangeText={text => onChangeField('amount', text)}
-              placeholder="Amount"
+              onChangeText={text => onChangeField('minAmount', Number(text))}
+              placeholder="Min Amount"
               value={filterObject?.minAmount?.toString()}
               keyboardType="numeric"
+              style={{flex: 1}}
             />
             <Input
-              onChangeText={text => onChangeField('amount', text)}
-              placeholder="Amount"
+              onChangeText={text => onChangeField('maxAmount', Number(text))}
+              placeholder="Max Amount"
               value={filterObject?.maxAmount?.toString()}
               keyboardType="numeric"
+              style={{flex: 1}}
             />
           </View>
           <View
@@ -136,7 +123,7 @@ const FilterScreen: React.FC<IFilter> = props => {
                 borderBottomColor: '#BFBFBF',
                 padding: 4,
               }}
-              onPress={() => setTypeDatePicker('from')}>
+              onPress={() => setTypeDatePicker('fromDate')}>
               {moment(filterObject?.fromDate).format('DD.MM.YYYY')}
             </Text>
             <Text
@@ -146,32 +133,24 @@ const FilterScreen: React.FC<IFilter> = props => {
                 borderBottomColor: '#BFBFBF',
                 padding: 4,
               }}
-              onPress={() => setTypeDatePicker('to')}>
+              onPress={() => setTypeDatePicker('toDate')}>
               {moment(filterObject?.toDate).format('DD.MM.YYYY')}
             </Text>
           </View>
         </View>
-        {typeDatePicker === 'from' && (
+        {typeDatePicker === 'fromDate' && (
           <DateTimePicker
-            minimumDate={
-              filterObject?.fromDate ? filterObject?.fromDate : new Date()
-            }
-            maximumDate={
-              filterObject?.toDate ? filterObject.toDate : new Date()
-            }
+            minimumDate={minDate ? minDate : new Date()}
+            maximumDate={maxDate ? maxDate : new Date()}
             value={filterObject?.fromDate ? filterObject?.fromDate : new Date()}
             mode="datetime"
             onChange={(event, date) => onChangeDate(date, 'fromDate')}
           />
         )}
-        {typeDatePicker === 'to' && (
+        {typeDatePicker === 'toDate' && (
           <DateTimePicker
-            minimumDate={
-              filterObject?.fromDate ? filterObject?.fromDate : new Date()
-            }
-            maximumDate={
-              filterObject?.toDate ? filterObject.toDate : new Date()
-            }
+            minimumDate={minDate ? minDate : new Date()}
+            maximumDate={maxDate ? maxDate : new Date()}
             value={filterObject?.toDate ? filterObject.toDate : new Date()}
             mode="datetime"
             onChange={(event, date) => onChangeDate(date, 'toDate')}

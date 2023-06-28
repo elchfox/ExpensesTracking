@@ -1,19 +1,27 @@
 import React from 'react';
 
-import {
-  BottomTabBar,
-  createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import FormExpense from '../componentes/Expense/FormExpense';
 import Main from '../screens/Main';
 import Profile from '../screens/Profile';
-import TabBarCustomButton from './TabBarCustomButton';
 import FloatButton from './FloatButton';
-import FormExpense from '../componentes/Expense/FormExpense';
+import TabBarCustomButton from './TabBarCustomButton';
 
 const Tab = createBottomTabNavigator();
 const Tabs: React.FC<any> = ({navigation}) => {
   return (
-    <Tab.Navigator screenOptions={{headerShown: false}}>
+    <Tab.Navigator
+      screenOptions={{
+              headerShown: false,
+        //       headerStyle: {
+              
+        //   }
+        tabBarStyle: {
+            minHeight: 80,
+            borderWidth: 0,
+        
+        },
+      }}>
       <Tab.Screen
         name="Home"
         component={Main}

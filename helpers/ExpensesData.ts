@@ -1,12 +1,12 @@
 import {IExpense, IUser} from '../types';
+import EventEmitter from './EventEmitter';
 import {getData, setData} from './storage';
 
 export const getListOfExpenses = async () => {
   let expenses: IExpense[] = await getData('expenses');
   return expenses ? expenses : [];
 };
-export const getMinMaxDate = async () => {
-  let expenses = await getExpenses();
+export const getMinMaxDate = async (expenses: IExpense[]) => {
   let dates: any[] = expenses.reduce((prev: Date[], current) => {
     prev.push(new Date(current.date));
     return prev;
@@ -21,14 +21,20 @@ export const getExpensesAndAllInfo = async () => {
     prev += current.amount;
     return prev;
   }, 0);
-  return {totalExpenses, expenses};
+  const {minDate, maxDate} = await getMinMaxDate(expenses);
+  return {totalExpenses, expenses, minDate, maxDate};
 };
+
 export const getExpenses = async () => {
   let expenses: IExpense[] = await getListOfExpenses();
   let user: IUser = await getData('currentUser');
   return expenses.filter(item => item.userId === user.id).reverse();
 };
 
+export const findExpenseById = async (id: string) => {
+  let expenses: IExpense[] = await getListOfExpenses();
+  return expenses.find(item => item.id === id);
+}; 
 export const createExpense = async (data: IExpense) => {
   let expenses: IExpense[] = await getListOfExpenses();
   let user: IUser = await getData('currentUser');
@@ -39,8 +45,11 @@ export const createExpense = async (data: IExpense) => {
     userId: user.id,
   });
   setData('expenses', expenses);
+  EventEmitter.emit('data-change', expenses);
   return await getExpenses();
 };
+
+
 
 export const editExpense = async (data: IExpense) => {
   let expenses: IExpense[] = await getListOfExpenses();
@@ -52,6 +61,7 @@ export const editExpense = async (data: IExpense) => {
     };
   }
   setData('expenses', expenses);
+  EventEmitter.emit('data-change', expenses);
   return await getExpenses();
 };
 
@@ -62,5 +72,6 @@ export const removeExpense = async (id: string) => {
     expenses.splice(indexOf, 1);
   }
   setData('expenses', expenses);
+  EventEmitter.emit('data-change', expenses);
   return await getExpenses();
 };

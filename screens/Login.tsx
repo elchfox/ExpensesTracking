@@ -4,9 +4,9 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import Button from '../componentes/Button';
 import Input from '../componentes/Input';
+import {getUsers} from '../helpers/UsersData';
 import {IUser} from '../types';
-import {getData} from '../helpers/storage';
-import { getUsers } from '../helpers/UsersData';
+var s = require('../styles');
 
 const Login: React.FC<any> = ({navigation}) => {
   const [username, setUserName] = useState<string>('');
@@ -16,7 +16,7 @@ const Login: React.FC<any> = ({navigation}) => {
       id,
       username,
     };
-    let users: IUser[] = await getUsers()
+    let users: IUser[] = await getUsers();
     const userExist = users.find(item => item.id === user.id);
     if (!userExist) {
       users.push(user);
@@ -30,7 +30,7 @@ const Login: React.FC<any> = ({navigation}) => {
 
   return (
     <View style={{flex: 1, padding: 60, backgroundColor: 'white'}}>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={s.centerVH}>
         <Input
           onChangeText={text => setUserName(text)}
           placeholder="Enter Name"

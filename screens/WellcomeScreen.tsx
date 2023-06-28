@@ -1,14 +1,13 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import {Text, View} from 'react-native';
+var s = require('../styles');
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-const Tab = createBottomTabNavigator();
-
-const WellcomeScreen: React.FC<any> = ({navigation}) => {
-
+const WellcomeScreen = () => {
   return (
-    <View style={{flex: 1,justifyContent:"center", alignItems:"center"}}>
-      <Text style={{fontSize: 32,fontWeight:"bold",color:"#5B58AD"}}>{'Wellcome'}</Text>
+    <View style={s.centerVH}>
+      <Text style={{fontSize: 32, fontWeight: 'bold', color: '#5B58AD'}}>
+        {'Wellcome'}
+      </Text>
       <Text style={{fontSize: 24}}>{'Expenses Tracking'}</Text>
     </View>
   );

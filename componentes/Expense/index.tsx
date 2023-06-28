@@ -1,15 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
-import {IExpense, IUser} from '../../types';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
+import React, {useEffect, useState} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {price} from '../../helpers';
+import {IExpense, IUser} from '../../types';
+import Icon from 'react-native-vector-icons/AntDesign';
+import { removeData } from '../../helpers/storage';
+import { removeExpense } from '../../helpers/ExpensesData';
 
 interface IExpenseProps extends IExpense {
   showDate?: boolean;
+  onDelete?:(id?:string)=> void
 }
 const Expense: React.FC<IExpenseProps> = props => {
-  const {amount, date, title, id, showDate, userId} = props;
+  const navigation = useNavigation<NavigationProp<any>>();
+
+  const {amount, date, title, id, showDate, userId,onDelete} = props;
   const [username, setUsername] = useState<string>('');
   useEffect(() => {
     init();
@@ -28,10 +35,13 @@ const Expense: React.FC<IExpenseProps> = props => {
     <>
       {showDate && (
         <View style={{backgroundColor: '#f3f3f3', padding: 8}}>
-          <Text style={{color:"#5B58AD"}}>{moment(date).format('DD.MM.YYYY')}</Text>
+          <Text style={{color: '#5B58AD'}}>
+            {moment(date).format('DD.MM.YYYY')}
+          </Text>
         </View>
       )}
-      <View
+      <TouchableOpacity
+        onPress={() => navigation.navigate('FormExpense', {itemId: props.id})}
         style={{
           padding: 8,
           flex: 1,
@@ -40,8 +50,17 @@ const Expense: React.FC<IExpenseProps> = props => {
           alignItems: 'center',
         }}>
         <Text>{title}</Text>
-        <Text style={{fontSize: 16}}>{price(amount)}</Text>
-      </View>
+        <View style={{
+          flexDirection: 'row',
+          gap:8,
+          alignItems: 'center',
+        }}>
+          <Text style={{ fontSize: 16 }}>{price(amount)}</Text>
+          <TouchableOpacity onPress={()=> onDelete && onDelete(id)}>
+            <Icon name="delete" />
+            </TouchableOpacity>
+          </View>
+      </TouchableOpacity>
     </>
   );
 };
