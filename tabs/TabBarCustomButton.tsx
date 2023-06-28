@@ -25,7 +25,7 @@ const TabBarCustomButton: React.FC<ITabBarCustomButton> = ({
       }}
       activeOpacity={isSelected ? 0.9 : 1}
       onPress={onPress}>
-      <Text style={{color: isSelected ? '#5B58AD' : 'black'}}>{value}</Text>
+      <Text style={{color: isSelected ? '#455EFF' : 'black'}}>{value}</Text>
     </TouchableOpacity>
   );
 };

@@ -1,3 +1,4 @@
+import { IUser } from '../types';
 import { getData, removeData } from './storage';
 
 export const checkUserExist = async () => {
@@ -6,4 +7,8 @@ export const checkUserExist = async () => {
 };
 export const userLogout = async () => {
   removeData('currentUser');
+};
+export const getUsers = async () => {
+  let users: IUser[] = await getData('users');
+  return users ? users : [];
 };

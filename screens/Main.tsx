@@ -1,13 +1,18 @@
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
-import {FlatList, View, Text} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import Expense from '../componentes/Expense';
-import {getExpenses, getExpensesAndAllInfo} from '../helpers/ExpensesData';
-import {IExpense} from '../types';
 import {price} from '../helpers';
+import {getExpensesAndAllInfo} from '../helpers/ExpensesData';
+import {IExpense, IFilterObj} from '../types';
+import FilterScreen from './FilterScreen';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 const Main: React.FC<any> = ({navigation}) => {
   const [expenses, setExpenses] = useState<IExpense[]>();
+  const [filterObject, setFilterObject] = useState<IFilterObj>({});
   let [allInfoExpenses, setAllInfoExpenses] = useState<any>();
+  let [filterVisible, setFilterVisible] = useState<boolean>(false);
 
   let currentDate = '';
 
@@ -20,87 +25,99 @@ const Main: React.FC<any> = ({navigation}) => {
     setAllInfoExpenses(allInfoExpenses);
     setExpenses(allInfoExpenses.expenses);
   };
-  interface IFilterObj {
-    title?: string;
-    amount?: {
-      min: number;
-      max?: number;
-    };
-    date?: {
-      from?: string;
-      to?: string;
-    };
-  }
-  const filterData = (filterObj: IFilterObj) => {
-    
+
+  const filterData = () => {
     return expenses?.filter(item => {
       // Check each condition
-      if (filterObj.title) {
-        return item.title.includes(filterObj.title);
+      if (filterObject.title) {
+        return item.title.includes(filterObject.title);
       }
-      if (filterObj.date) {
-        if (filterObj.date.from && filterObj.date.to) {
-          return (
-            item.date >= new Date(filterObj.date.from) && item.date <= new Date(filterObj.date.to)
-            );
-        }
-        if (filterObj.date.from) {
-          return item.date >= new Date(filterObj.date.from);
-        }
-        if (filterObj.date.to) {
-          return item.date <= new Date(filterObj.date.to);
-        }
+
+      if (filterObject.fromDate && filterObject.toDate) {
+        return (
+          item.date >= new Date(filterObject.fromDate) &&
+          item.date <= new Date(filterObject.toDate)
+        );
       }
-      
-      if (filterObj.amount) {
-        if (item.amount >= filterObj.amount.min) {
-          if (filterObj.amount?.max) {
-            return item.amount <= filterObj.amount?.max;
-          }
-          return false;
+
+      if (filterObject.minAmount && item.amount >= filterObject.minAmount) {
+        if (filterObject.maxAmount) {
+          return item.amount <= filterObject.maxAmount;
         }
+        return true;
       }
+      if (filterObject.maxAmount && item.amount <= filterObject.maxAmount) {
+        if (filterObject.minAmount) {
+          return item.amount >= filterObject.maxAmount;
+        }
+        return true;
+      }
+
       // If all conditions are satisfied, keep the item in the filtered array
       return true;
     });
   };
   return (
-    <View style={{flex: 1, backgroundColor: 'white'}}>
-      <View>
-        <Text
-          style={{
-            padding: 60,
-            fontSize: 28,
-            fontWeight: 'bold',
-            textAlign: 'center',
-          }}>
-          {'Expenes '}
-          {price(allInfoExpenses?.totalExpenses)}
-        </Text>
-      </View>
-      <FlatList
-        contentContainerStyle={{paddingBottom: 30}}
-        data={filterData({
-          date: {
-            from: "2023-02-25",
-            // from: new Date("2023-02-25"),
-            // to: new Date("19/08/2023")
-          },
-          amount: {
-            min: 50,
-            max:1500
-          }
-        })}
-        renderItem={({item}) => {
-          let showDate = currentDate !== moment(item.date).format('MM.DD.YYYY');
-          if (showDate) {
-            currentDate = moment(item.date).format('MM.DD.YYYY');
-          }
+    <>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
+        <View style={{padding: 15}}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'bold',
+              color: 'black',
+            }}>
+            {'Total Expenses: '}
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: 'normal',
+              }}>
+              {price(allInfoExpenses?.totalExpenses)}
+            </Text>
+          </Text>
+          {allInfoExpenses?.expenses && (
+            <TouchableOpacity
+              onPress={() => setFilterVisible(true)}
+              style={{
+                // justifyContent: 'center',
+                alignSelf: 'flex-end',
+                borderRadius: 30,
 
-          return <Expense {...item} showDate={showDate} />;
-        }}
-      />
-    </View>
+                padding: 5,
+                paddingHorizontal: 15,
+                backgroundColor: '#D9D9D9',
+              }}>
+              <Text style={{color: 'black', fontWeight: 'bold'}}>
+                <Icon name="sliders" /> Filter
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
+        <FlatList
+          contentContainerStyle={{paddingBottom: 30}}
+          data={filterData()}
+          renderItem={({item}) => {
+            let showDate =
+              currentDate !== moment(item.date).format('MM.DD.YYYY');
+            if (showDate) {
+              currentDate = moment(item.date).format('MM.DD.YYYY');
+            }
+
+            return <Expense {...item} showDate={showDate} />;
+          }}
+        />
+      </View>
+      {filterVisible && (
+        <FilterScreen
+          onFilter={data => {
+            setFilterObject(data);
+            setFilterVisible(false);
+          }}
+          onClose={() => setFilterVisible(false)}
+        />
+      )}
+    </>
   );
 };
 

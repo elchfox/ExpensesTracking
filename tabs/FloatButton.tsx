@@ -1,6 +1,7 @@
 import {BottomTabBarButtonProps} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {Text, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 interface ITabBarCustomButton extends BottomTabBarButtonProps {
   value: string;
@@ -29,7 +30,8 @@ const FloatButton: React.FC<ITabBarCustomButton> = ({
       }}
       activeOpacity={isSelected ? 0.9 : 1}
       onPress={onPress}>
-      <Text
+         <Icon name="plus" size={30} color={"white"} />
+      {/* <Text
         style={{
           lineHeight:50,
           color: 'white',
@@ -43,7 +45,7 @@ const FloatButton: React.FC<ITabBarCustomButton> = ({
           alignContent: 'center',
         }}>
         {'+'}
-      </Text>
+      </Text> */}
     </TouchableOpacity>
   );
 };

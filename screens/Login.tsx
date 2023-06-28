@@ -6,6 +6,7 @@ import Button from '../componentes/Button';
 import Input from '../componentes/Input';
 import {IUser} from '../types';
 import {getData} from '../helpers/storage';
+import { getUsers } from '../helpers/UsersData';
 
 const Login: React.FC<any> = ({navigation}) => {
   const [username, setUserName] = useState<string>('');
@@ -15,7 +16,7 @@ const Login: React.FC<any> = ({navigation}) => {
       id,
       username,
     };
-    let users: IUser[] = await getData('users');
+    let users: IUser[] = await getUsers()
     const userExist = users.find(item => item.id === user.id);
     if (!userExist) {
       users.push(user);

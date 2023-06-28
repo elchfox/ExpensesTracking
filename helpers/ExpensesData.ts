@@ -5,15 +5,23 @@ export const getListOfExpenses = async () => {
   let expenses: IExpense[] = await getData('expenses');
   return expenses ? expenses : [];
 };
+export const getMinMaxDate = async () => {
+  let expenses = await getExpenses();
+  let dates: any[] = expenses.reduce((prev: Date[], current) => {
+    prev.push(new Date(current.date));
+    return prev;
+  }, []);
+  const minDate = new Date(Math.min(...dates));
+  const maxDate = new Date(Math.max(...dates));
+  return {minDate, maxDate};
+};
 export const getExpensesAndAllInfo = async () => {
-  let expenses = await getExpenses()
-  let totalExpenses = expenses.reduce((prev, current) => 
-  {
-    prev += current.amount
-    return prev
-  }
-    , 0)
-  return {totalExpenses,expenses}
+  let expenses = await getExpenses();
+  let totalExpenses = expenses.reduce((prev, current) => {
+    prev += current.amount;
+    return prev;
+  }, 0);
+  return {totalExpenses, expenses};
 };
 export const getExpenses = async () => {
   let expenses: IExpense[] = await getListOfExpenses();
