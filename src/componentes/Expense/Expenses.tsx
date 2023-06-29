@@ -28,13 +28,15 @@ const Expenses = () => {
   return (
     <>
       <View style={{padding: 15}}>
-        <TouchableOpacity
-          onPress={() => setFilterVisible(true)}
-          style={styles.filterBtn}>
-          <Text style={{color: 'black', fontWeight: 'bold'}}>
-            <Icon name="sliders" /> Filter
-          </Text>
-        </TouchableOpacity>
+        {allInfoExpenses.expenses.length > 0 && (
+          <TouchableOpacity
+            onPress={() => setFilterVisible(true)}
+            style={styles.filterBtn}>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>
+              <Icon name="sliders" /> Filter
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       {filterVisible && (
@@ -54,8 +56,19 @@ const Expenses = () => {
         />
       )}
       <FlatList
-        contentContainerStyle={{paddingBottom: 30}}
+        contentContainerStyle={{paddingBottom: 30, flexGrow: 1}}
         data={filterExpenses(allInfoExpenses.expenses, filters)}
+        ListEmptyComponent={() => (
+          <View
+            style={{
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Icon name="inbox" size={40} />
+            <Text>{'No Data'}</Text>
+          </View>
+        )}
         renderItem={({item, index}) => {
           let showDate =
             index === 0 ||
