@@ -71,8 +71,8 @@ const FormExpense: React.FC<IExpenseProps> = props => {
         <Input
           label="Amount"
           keyboardType="numeric"
-          value={expense.amount > 0 ? expense?.amount?.toString() : ''}
-          onChangeText={text => onChangeField('amount', Number(text))}
+          value={expense.amount > 0 ? expense?.amount.toString() : ''}
+          onChangeText={text => onChangeField('amount', text)}
         />
         <Text
           style={[style.textInput, {color: 'black'}]}

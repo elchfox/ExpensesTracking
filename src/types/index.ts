@@ -11,7 +11,7 @@ export interface IExpense {
   showDate?: boolean;
 }
 
-export interface IFilterObj {
+export interface IFilters {
   title?: string;
   minAmount?: number;
   maxAmount?: number;

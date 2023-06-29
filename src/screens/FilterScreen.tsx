@@ -8,16 +8,15 @@ import Button from '../componentes/Button';
 
 import style from '../../styles';
 import ModalCustom from '../componentes/ModalCustom';
-import { IFilterObj } from '../types';
+import { IFilters } from '../types';
 const initialData = {};
 interface IFilter {
   minDate?: Date;
   maxDate?: Date;
-  filterObject: IFilterObj;
-  onFilter: (data: IFilterObj) => void;
+  filterObject: IFilters;
+  onFilter: (data: IFilters) => void;
   onClose: () => void;
 }
-var s = require('../styles');
 
 const FilterScreen: React.FC<IFilter> = props => {
   const {maxDate, minDate} = props;
@@ -25,9 +24,7 @@ const FilterScreen: React.FC<IFilter> = props => {
     'fromDate' | 'toDate' | null
   >(null);
 
-  let [filterObject, setFilterObject] = useState<IFilterObj>(
-    props.filterObject,
-  );
+  let [filterObject, setFilterObject] = useState<IFilters>(props.filterObject);
 
   const onChangeField = async (name: string, value: string | number | Date) => {
     setFilterObject({
@@ -67,14 +64,14 @@ const FilterScreen: React.FC<IFilter> = props => {
         />
         <View style={styles.rowInputs}>
           <Input
-            onChangeText={text => onChangeField('minAmount', Number(text))}
+            onChangeText={text => onChangeField('minAmount', text)}
             label="Min Amount"
             value={filterObject?.minAmount?.toString()}
             keyboardType="numeric"
             style={{flex: 1}}
           />
           <Input
-            onChangeText={text => onChangeField('maxAmount', Number(text))}
+            onChangeText={text => onChangeField('maxAmount', text)}
             label="Max Amount"
             value={filterObject?.maxAmount?.toString()}
             keyboardType="numeric"

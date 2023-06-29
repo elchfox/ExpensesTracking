@@ -13,7 +13,7 @@ import {IExpense, IInfoAboutExpense, IUser} from './src/types';
 
 const Stack = createNativeStackNavigator();
 
-function App({}): JSX.Element {
+const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [routeName, setRouteName] = useState<any>('');
   const [allInfoExpenses, setAllInfoExpenses] = useState<IInfoAboutExpense>({
@@ -25,12 +25,11 @@ function App({}): JSX.Element {
   const [dataExpense, setDataExpense] = useState<IExpense>();
   const init = async () => {
     let user: IUser = await getUser();
-
-    // if (user.id) {
-    //   currentUser.id = user.id;
-    //   currentUser.username = user.username;
-    // }
-    setRouteName(user.id ? 'Home' : 'Login');
+    if (user.id) {
+      currentUser.id = user.id;
+      currentUser.username = user.username;
+    }
+    setRouteName(user?.id ? 'Main' : 'Login');
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
@@ -64,7 +63,7 @@ function App({}): JSX.Element {
             }}
           />
           <Stack.Screen
-            name="Home"
+            name="Main"
             component={Home}
             options={{
               headerTitle: props => <HeaderTopBar />,
@@ -75,6 +74,6 @@ function App({}): JSX.Element {
       </NavigationContainer>
     </InfoContext.Provider>
   );
-}
+};
 
 export default App;

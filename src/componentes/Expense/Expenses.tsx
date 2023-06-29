@@ -6,13 +6,13 @@ import Expense from '.';
 import {filterExpenses, removeExpense} from '../../helpers/ExpensesData';
 import {InfoContext} from '../../helpers/useContext';
 import FilterScreen from '../../screens/FilterScreen';
-import {IFilterObj} from '../../types';
+import {IFilters} from '../../types';
 
 const Expenses = () => {
   const {allInfoExpenses} = useContext(InfoContext);
   let [filterVisible, setFilterVisible] = useState<boolean>(false);
 
-  const [filters, setFilters] = useState<IFilterObj>({
+  const [filters, setFilters] = useState<IFilters>({
     fromDate: allInfoExpenses.minDate,
     toDate: allInfoExpenses.maxDate,
   });
@@ -43,7 +43,11 @@ const Expenses = () => {
           maxDate={allInfoExpenses?.maxDate}
           filterObject={filters}
           onFilter={data => {
-            setFilters(data);
+            setFilters({
+              ...data,
+              maxAmount: Number(data.maxAmount),
+              minAmount: Number(data.minAmount),
+            });
             onClose();
           }}
           onClose={onClose}

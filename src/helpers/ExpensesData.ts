@@ -1,5 +1,6 @@
-import {IExpense, IFilterObj, IUser} from '../types';
+import {IExpense, IFilters} from '../types';
 import EventEmitter from './EventEmitter';
+import {currentUser} from './UsersData';
 import {getData, setData} from './storage';
 
 export const getListOfExpenses = async () => {
@@ -27,10 +28,11 @@ export const getExpensesAndAllInfo = async () => {
 
 export const getExpenses = async () => {
   let expenses: IExpense[] = await getListOfExpenses();
-  let user: IUser = await getData('currentUser');
   return expenses
-    .filter(item => item.userId === user.id)
-    .sort((a, b) => {return new Date(b.date).getTime() - new Date(a.date).getTime() });
+    .filter(item => item.userId === currentUser.id)
+    .sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 };
 
 export const findExpenseById = async (id: string) => {
@@ -39,15 +41,13 @@ export const findExpenseById = async (id: string) => {
 };
 export const createExpense = async (data: IExpense) => {
   let expenses: IExpense[] = await getListOfExpenses();
-  let user: IUser = await getData('currentUser');
   expenses.push({
     ...data,
     id: new Date().getTime().toString(),
-    userId: user.id,
+    userId: currentUser.id,
+    amount: Number(data.amount),
   });
-  setData('expenses', expenses);
-  EventEmitter.emit('data-change', expenses);
-  return await getExpenses();
+  return dataChange(expenses);
 };
 
 export const editExpense = async (data: IExpense) => {
@@ -57,11 +57,10 @@ export const editExpense = async (data: IExpense) => {
     expenses[indexOf] = {
       ...expenses[indexOf],
       ...data,
+      amount: Number(data.amount),
     };
   }
-  setData('expenses', expenses);
-  EventEmitter.emit('data-change', expenses);
-  return await getExpenses();
+  return dataChange(expenses);
 };
 
 export const removeExpense = async (id: string) => {
@@ -70,14 +69,20 @@ export const removeExpense = async (id: string) => {
   if (indexOf >= 0) {
     expenses.splice(indexOf, 1);
   }
+  return dataChange(expenses);
+};
+
+const dataChange = async (expenses: IExpense[]) => {
   setData('expenses', expenses);
   EventEmitter.emit('data-change', expenses);
   return await getExpenses();
 };
-
-export const filterExpenses = (expenses: IExpense[], filters: IFilterObj) => {
+export const filterExpenses = (expenses: IExpense[], filters: IFilters) => {
   return expenses?.filter(item => {
-    if (filters.title && !item.title.toLowerCase().includes(filters.title)) {
+    if (
+      filters.title &&
+      !item.title.toLowerCase().trim().includes(filters.title)
+    ) {
       return false;
     }
     if (filters.minAmount && item.amount < filters.minAmount) {

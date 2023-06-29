@@ -6,7 +6,7 @@ import Button from '../componentes/Button';
 import Input from '../componentes/Input';
 import style from '../../styles';
 import {IUser} from '../types';
-import {getUsers} from '../helpers/UsersData';
+import {currentUser, getUsers} from '../helpers/UsersData';
 
 const Login: React.FC<any> = ({navigation}) => {
   const [username, setUserName] = useState<string>('');
@@ -21,7 +21,9 @@ const Login: React.FC<any> = ({navigation}) => {
     !userExist && users.push(user);
     AsyncStorage.setItem('users', JSON.stringify(users));
     AsyncStorage.setItem('currentUser', JSON.stringify(user));
-    navigation.dispatch(StackActions.replace('Home'));
+    currentUser.id = user.id;
+    currentUser.username = user.username;
+    navigation.dispatch(StackActions.replace('Main'));
   };
 
   return (
