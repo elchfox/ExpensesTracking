@@ -6,6 +6,9 @@ import HeaderTopBar from './src/componentes/Header';
 import {currentUser, getUser} from './src/helpers/UsersData';
 import {InfoContext} from './src/helpers/useContext';
 
+import {StatusBar} from 'react-native';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import COLORS from './src/constants/theme';
 import Home from './src/screens/Home';
 import Login from './src/screens/Login';
 import WellcomeScreen from './src/screens/WellcomeScreen';
@@ -42,37 +45,41 @@ const App = () => {
     return <WellcomeScreen />;
   }
   return (
-    <InfoContext.Provider
-      value={{
-        allInfoExpenses,
-        setAllInfoExpenses,
-        expenses,
-        setExpenses,
-        modalFormExpenses,
-        setModalFormExpenses,
-        dataExpense,
-        setDataExpense,
-      }}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={routeName}>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Main"
-            component={Home}
-            options={{
-              headerTitle: props => <HeaderTopBar />,
-              headerShadowVisible: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </InfoContext.Provider>
+    <SafeAreaProvider>
+      <StatusBar backgroundColor={COLORS.primary} />
+      <SafeAreaView style={{backgroundColor: COLORS.primary}} />
+      <InfoContext.Provider
+        value={{
+          allInfoExpenses,
+          setAllInfoExpenses,
+          expenses,
+          setExpenses,
+          modalFormExpenses,
+          setModalFormExpenses,
+          dataExpense,
+          setDataExpense,
+        }}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName={routeName}>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="Main"
+              component={Home}
+              options={{
+                header: props => <HeaderTopBar />,
+
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </InfoContext.Provider>
+    </SafeAreaProvider>
   );
 };
 

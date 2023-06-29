@@ -42,7 +42,7 @@ const style = StyleSheet.create({
     right: 0,
     left: 0,
     bottom: 0,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     padding: 15,
     flexDirection: 'column',
     gap: 50,

@@ -2,13 +2,12 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import React, {useState} from 'react';
-import {Text, View} from 'react-native';
-import {createExpense, editExpense} from '../../helpers/ExpensesData';
-import style from '../../../styles';
-import {IExpense} from '../../types';
+import React, { useState } from 'react';
+import { View } from 'react-native';
+import { createExpense, editExpense } from '../../helpers/ExpensesData';
+import { IExpense } from '../../types';
 import Button from '../Button';
-import Input from '../Input';
+import Input, { DisplayTextInput } from '../Input';
 import ModalCustom from '../ModalCustom';
 
 const initData: IExpense = {
@@ -56,10 +55,10 @@ const FormExpense: React.FC<IExpenseProps> = props => {
   return (
     <ModalCustom
       title={`${expense.id ? 'Update' : 'Create'} Expense`}
+      leftAction={<View />}
       onClose={onClose}>
       <View
         style={{
-          flex: 1,
           gap: 30,
           width: '100%',
         }}>
@@ -74,11 +73,14 @@ const FormExpense: React.FC<IExpenseProps> = props => {
           value={expense.amount > 0 ? expense?.amount.toString() : ''}
           onChangeText={text => onChangeField('amount', text)}
         />
-        <Text
-          style={[style.textInput, {color: 'black'}]}
-          onPress={() => setShowDate(true)}>
-          {moment(expense?.date).format('DD.MM.YYYY')}
-        </Text>
+
+        <DisplayTextInput
+          label="Date"
+          style={{flex: 1}}
+          value={expense?.date ? moment(expense?.date).format('DD.MM.YYYY') : ""}
+          onPress={() => setShowDate(true)}
+        />
+
         {showDate && (
           <DateTimePicker
             value={expense?.date ? expense?.date : new Date()}
@@ -91,7 +93,7 @@ const FormExpense: React.FC<IExpenseProps> = props => {
       <View style={{alignItems: 'center'}}>
         <Button
           disabled={!expense.title || expense?.amount === 0}
-          text={`${expense.id ? 'Update' : 'Create'}`}
+          text={`${expense.id ? 'Save' : 'Create'}`}
           onPress={onCreate}
         />
       </View>

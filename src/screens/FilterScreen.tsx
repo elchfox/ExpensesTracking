@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Input from '../componentes/Input';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import Input, {DisplayTextInput} from '../componentes/Input';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Button from '../componentes/Button';
 
-import style from '../../styles';
 import ModalCustom from '../componentes/ModalCustom';
-import { IFilters } from '../types';
+import {IFilters} from '../types';
 const initialData = {};
 interface IFilter {
   minDate?: Date;
@@ -79,16 +78,27 @@ const FilterScreen: React.FC<IFilter> = props => {
           />
         </View>
         <View style={styles.rowInputs}>
-          <Text
-            style={[style.textInput, {flex: 1}]}
-            onPress={() => setTypeDatePicker('fromDate')}>
-            {moment(filterObject?.fromDate).format('DD.MM.YYYY')}
-          </Text>
-          <Text
-            style={[style.textInput, {flex: 1}]}
-            onPress={() => setTypeDatePicker('toDate')}>
-            {moment(filterObject?.toDate).format('DD.MM.YYYY')}
-          </Text>
+          <DisplayTextInput
+            style={{flex: 1}}
+            label="From Date"
+            value={
+              filterObject?.fromDate
+                ? moment(filterObject?.fromDate).format('DD.MM.YYYY')
+                : ''
+            }
+            onPress={() => setTypeDatePicker('fromDate')}
+          />
+
+          <DisplayTextInput
+            label="To Date"
+            style={{flex: 1}}
+            value={
+              filterObject?.toDate
+                ? moment(filterObject?.toDate).format('DD.MM.YYYY')
+                : ''
+            }
+            onPress={() => setTypeDatePicker('toDate')}
+          />
         </View>
       </View>
       {typeDatePicker === 'fromDate' && (

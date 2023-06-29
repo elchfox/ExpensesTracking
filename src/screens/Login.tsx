@@ -31,9 +31,7 @@ const Login: React.FC<any> = ({navigation}) => {
       <View style={{flex: 1, justifyContent: 'center', gap: 30, width: '100%'}}>
         <View
           style={{
-            gap: 15,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
+            width:"100%"
           }}>
           <Input
             onChangeText={text => setUserName(text)}
