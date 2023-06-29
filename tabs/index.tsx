@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import FormExpense from '../componentes/Expense/FormExpense';
 import Main from '../screens/Main';
@@ -8,18 +7,17 @@ import FloatButton from './FloatButton';
 import TabBarCustomButton from './TabBarCustomButton';
 
 const Tab = createBottomTabNavigator();
-const Tabs: React.FC<any> = ({navigation}) => {
+interface ITabs {
+  onPressModal:()=> void;
+}
+const Tabs:React.FC<ITabs> = (props) => {
   return (
     <Tab.Navigator
       screenOptions={{
-              headerShown: false,
-        //       headerStyle: {
-              
-        //   }
+        headerShown: false,
         tabBarStyle: {
-            minHeight: 80,
-            borderWidth: 0,
-        
+          minHeight: 80,
+          borderWidth: 0,
         },
       }}>
       <Tab.Screen
@@ -32,8 +30,15 @@ const Tabs: React.FC<any> = ({navigation}) => {
       <Tab.Screen
         name="FormExpense"
         component={FormExpense}
+        listeners={()=> ({
+            tabPress:(e)=>{
+              e.preventDefault();
+              props.onPressModal()
+            }
+        })}
         options={{
           tabBarButton: props => <FloatButton value="Profile" {...props} />,
+          
         }}
       />
       <Tab.Screen
@@ -45,9 +50,6 @@ const Tabs: React.FC<any> = ({navigation}) => {
           ),
         }}
       />
-
-      {/* <TabScreen  name="Restaurants"  value="restaurant" iconName="utensils"
-                component={RestaurantsScreen}/> */}
     </Tab.Navigator>
   );
 };

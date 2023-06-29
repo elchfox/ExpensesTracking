@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native';
-var s = require('../styles');
+import style from '../styles';
 
 interface IButton extends TouchableOpacityProps {
   text: string;
@@ -16,7 +16,7 @@ const Button: React.FC<IButton> = props => {
     <TouchableOpacity
       {...props}
       activeOpacity={0.8}
-      style={[s.button, props.style]}>
+      style={[style.button, props.style]}>
       <Text style={[{color: 'white', textAlign: 'center'}, props.textStyle]}>
         {props.text}
       </Text>

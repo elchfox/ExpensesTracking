@@ -2,7 +2,8 @@ import {StackActions} from '@react-navigation/native';
 import React, {useContext} from 'react';
 import {Text, View} from 'react-native';
 import {userLogout} from '../helpers/UsersData';
-import {InfoContext} from './Home';
+import {InfoContext} from '../helpers/useContext';
+import style from '../styles';
 var s = require('../styles');
 
 const Profile: React.FC<any> = ({navigation}) => {
@@ -12,9 +13,15 @@ const Profile: React.FC<any> = ({navigation}) => {
     navigation.dispatch(StackActions.replace('Login'));
   };
   return (
-    <View style={{flex: 1, padding: 60, backgroundColor: 'white'}}>
-      <Text style={s.textInput}>{allInfoExpenses.expenses?.length}</Text>
-      <Text style={s.textInput} onPress={logout}>
+    <View style={style.wapperScreen}>
+      <View style={[style.textInput, {flexDirection:"row"}]}>
+        <Text style={{flex:1,color:"black"}}>{'Total Expenses Items '}</Text>
+        <Text style={{color:"black"}}>{allInfoExpenses.expenses?.length}</Text>
+      </View>
+      {/* <View style={[style.textInput, {flexDirection:"row"}]}>
+        <Text style={{color:"black"}}>{'Logout'}</Text>
+      </View> */}
+      <Text style={style.textInput} onPress={logout}>
         {'Logout'}
       </Text>
     </View>

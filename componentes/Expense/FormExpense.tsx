@@ -2,22 +2,17 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import React, {useState, useEffect} from 'react';
-import {Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View } from 'react-native';
 import {
   createExpense,
-  editExpense,
-  findExpenseById,
+  editExpense
 } from '../../helpers/ExpensesData';
-import {IExpense} from '../../types';
+import style from '../../styles';
+import { IExpense } from '../../types';
 import Button from '../Button';
 import Input from '../Input';
-import {
-  NavigationProp,
-  useNavigation,
-  useRoute,
-} from '@react-navigation/native';
-var s = require('../../styles');
+import ModalCustom from '../ModalCustom';
 
 const initData: IExpense = {
   title: '',
@@ -26,34 +21,22 @@ const initData: IExpense = {
 };
 interface IExpenseProps {
   data?: IExpense;
+  onClose?: () => void;
 }
 
 const FormExpense: React.FC<IExpenseProps> = props => {
   const {data} = props;
-  const params: any = useRoute().params;
   const [expense, setExpense] = useState<IExpense>({...initData, ...data});
   const [showDate, setShowDate] = useState<boolean>(false);
-  const navigation = useNavigation<NavigationProp<any>>();
+  
 
-  useEffect(() => {
-    init();
-  }, []);
-  const init = async () => {
-    if (params.itemId) {
-      let _expense = await findExpenseById(params.itemId);
-      setExpense({
-        ...expense,
-        ..._expense,
-      });
-    }
-  };
   const onCreate = async () => {
     if (expense.id) {
       await editExpense(expense);
     } else {
       await createExpense(expense);
     }
-    navigation.navigate('Home');
+    onClose();
   };
   const onChangeField = async (name: string, value: string | number) => {
     setExpense({
@@ -70,13 +53,17 @@ const FormExpense: React.FC<IExpenseProps> = props => {
       date: selectedDate,
     });
   };
+
+  const onClose = () => {
+    props.onClose && props.onClose();
+  };
   return (
-    <View style={{flex: 1, padding: 60, backgroundColor: 'white', gap: 40}}>
-      <Text>{`${expense.id ? 'Update' : 'Create'} Expense`}</Text>
+    <ModalCustom
+      title={`${expense.id ? 'Update' : 'Create'} Expense`}
+      onClose={onClose}>
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
           gap: 30,
           width: '100%',
         }}>
@@ -87,10 +74,10 @@ const FormExpense: React.FC<IExpenseProps> = props => {
         />
         <Input
           placeholder="Amount"
-          defaultValue={expense?.amount.toString()}
+          defaultValue={expense.amount > 0 ? expense?.amount?.toString() : ''}
           onChangeText={text => onChangeField('amount', Number(text))}
         />
-        <Text style={s.textInput} onPress={() => setShowDate(true)}>
+        <Text style={[style.textInput,{color:"black"}]} onPress={() => setShowDate(true)}>
           {moment(expense?.date).format('DD.MM.YYYY')}
         </Text>
         {showDate && (
@@ -104,11 +91,12 @@ const FormExpense: React.FC<IExpenseProps> = props => {
 
       <View style={{alignItems: 'center'}}>
         <Button
+          disabled={!expense.title || expense?.amount === 0}
           text={`${expense.id ? 'Update' : 'Create'}`}
           onPress={onCreate}
         />
       </View>
-    </View>
+    </ModalCustom>
   );
 };
 

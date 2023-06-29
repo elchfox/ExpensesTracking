@@ -1,67 +1,65 @@
 import moment from 'moment';
-import React, { useContext, useState } from 'react';
-import { FlatList } from 'react-native';
+import React, {useContext, useState} from 'react';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Expense from '.';
-import { removeExpense } from '../../helpers/ExpensesData';
+import {filterExpenses, removeExpense} from '../../helpers/ExpensesData';
+import {InfoContext} from '../../helpers/useContext';
 import FilterScreen from '../../screens/FilterScreen';
-import { InfoContext } from '../../screens/Home';
-import { IFilterObj } from '../../types';
-interface IExpensesProps {
-  openFilter?:boolean
-  onClose?:()=> void
-}
-const Expenses: React.FC<IExpensesProps> = props => {
+import {IFilterObj} from '../../types';
+
+const Expenses = () => {
   const {allInfoExpenses} = useContext(InfoContext);
+  let [filterVisible, setFilterVisible] = useState<boolean>(false);
+
   const [filters, setFilters] = useState<IFilterObj>({
     fromDate: allInfoExpenses.minDate,
     toDate: allInfoExpenses.maxDate,
   });
   let currentDate = '';
 
-
-  const filterData = () => {
-    return allInfoExpenses.expenses?.filter(item => {
-      if (filters.title && !item.title.toLowerCase().includes(filters.title)) {
-        return false;
-      }
-      if (filters.minAmount && item.amount < filters.minAmount) {
-        return false;
-      }
-      if (filters.maxAmount && item.amount > filters.maxAmount) {
-        return false;
-      }
-      if (filters.fromDate && new Date(item.date) < filters.fromDate) {
-        return false;
-      }
-      if (filters.toDate && new Date(item.date) > filters.toDate) {
-        return false;
-      }
-
-      return true;
-    });
-  };
-
   const onDelete = (id?: string) => {
     id && removeExpense(id);
   };
+  const onClose = () => {
+    setFilterVisible(false);
+  };
   return (
     <>
-      {props.openFilter && (
+      <View style={{padding: 15}}>
+        <TouchableOpacity
+          onPress={() => setFilterVisible(true)}
+          style={{
+            alignSelf: 'flex-end',
+            borderRadius: 30,
+            padding: 5,
+            paddingHorizontal: 15,
+            backgroundColor: '#D9D9D9',
+          }}>
+          <Text style={{color: 'black', fontWeight: 'bold'}}>
+            <Icon name="sliders" /> Filter
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {filterVisible && (
         <FilterScreen
           minDate={allInfoExpenses?.minDate}
           maxDate={allInfoExpenses?.maxDate}
           filterObject={filters}
           onFilter={data => {
             setFilters(data);
-            props.onClose && props.onClose()
+            onClose();
           }}
-          onClose={() => props.onClose && props.onClose()}
+          onClose={onClose}
         />
       )}
       <FlatList
         contentContainerStyle={{paddingBottom: 30}}
-        data={filterData()}
-        
+        ItemSeparatorComponent={() => (
+          <View style={{width: '100%', height: 1, backgroundColor: 'black'}} />
+        )}
+        data={filterExpenses(allInfoExpenses.expenses, filters)}
         renderItem={({item}) => {
           let showDate = currentDate !== moment(item.date).format('MM.DD.YYYY');
           if (showDate) {

@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-var s = require('../styles');
+import style from '../styles';
 
 const WellcomeScreen = () => {
   return (
-    <View style={s.centerVH}>
+    <View style={style.centerVH}>
       <Text style={{fontSize: 32, fontWeight: 'bold', color: '#5B58AD'}}>
         {'Wellcome'}
       </Text>

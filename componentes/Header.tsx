@@ -18,11 +18,7 @@ const Header: React.FC<any> = props => {
     }
   };
 
-  return (
-    <View style={{justifyContent:"center",alignItems:'center',flex:1,backgroundColor:"red"}}>
-      <Text style={{textAlign:"center",fontWeight:"bold"}}>{username}</Text>
-    </View>
-  );
+  return <Text style={{fontWeight: 'bold'}}>{username}</Text>;
 };
 
 export default Header;

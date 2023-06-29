@@ -4,16 +4,24 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Header from './componentes/Header';
 import {checkUserExist} from './helpers/UsersData';
+import {InfoContext} from './helpers/useContext';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import WellcomeScreen from './screens/WellcomeScreen';
+import {IExpense, IInfoAboutExpense} from './types';
 
 const Stack = createNativeStackNavigator();
 
 function App({}): JSX.Element {
-  let [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [routeName, setRouteName] = useState<any>('');
-
+  const [allInfoExpenses, setAllInfoExpenses] = useState<IInfoAboutExpense>({
+    expenses: [],
+    totalExpenses: 0,
+  });
+  const [expenses, setExpenses] = useState<IExpense[]>([]);
+  const [modalFormExpenses, setModalFormExpenses] = useState<boolean>(false);
+  const [dataExpense, setDataExpense] = useState<IExpense>();
   const init = async () => {
     let user: boolean = await checkUserExist();
     setRouteName(user ? 'Home' : 'Login');
@@ -29,19 +37,37 @@ function App({}): JSX.Element {
     return <WellcomeScreen />;
   }
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={routeName}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerTitle: props => <Header {...props} />,
-            headerShadowVisible: false,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <InfoContext.Provider
+      value={{
+        allInfoExpenses,
+        setAllInfoExpenses,
+        expenses,
+        setExpenses,
+        modalFormExpenses,
+        setModalFormExpenses,
+        dataExpense,
+        setDataExpense,
+      }}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={routeName}>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerTitle: props => <Header {...props} />,
+              headerShadowVisible: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </InfoContext.Provider>
   );
 }
 

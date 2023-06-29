@@ -1,4 +1,4 @@
-import {IExpense, IUser} from '../types';
+import {IExpense, IFilterObj, IUser} from '../types';
 import EventEmitter from './EventEmitter';
 import {getData, setData} from './storage';
 
@@ -17,6 +17,7 @@ export const getMinMaxDate = async (expenses: IExpense[]) => {
 };
 export const getExpensesAndAllInfo = async () => {
   let expenses = await getExpenses();
+  console.log(expenses,"hghfg")
   let totalExpenses = expenses.reduce((prev, current) => {
     prev += current.amount;
     return prev;
@@ -28,13 +29,15 @@ export const getExpensesAndAllInfo = async () => {
 export const getExpenses = async () => {
   let expenses: IExpense[] = await getListOfExpenses();
   let user: IUser = await getData('currentUser');
-  return expenses.filter(item => item.userId === user.id).reverse();
+  return expenses
+    .filter(item => item.userId === user.id)
+    .sort((a, b) => {return new Date(b.date).getTime() - new Date(a.date).getTime() });
 };
 
 export const findExpenseById = async (id: string) => {
   let expenses: IExpense[] = await getListOfExpenses();
   return expenses.find(item => item.id === id);
-}; 
+};
 export const createExpense = async (data: IExpense) => {
   let expenses: IExpense[] = await getListOfExpenses();
   let user: IUser = await getData('currentUser');
@@ -48,8 +51,6 @@ export const createExpense = async (data: IExpense) => {
   EventEmitter.emit('data-change', expenses);
   return await getExpenses();
 };
-
-
 
 export const editExpense = async (data: IExpense) => {
   let expenses: IExpense[] = await getListOfExpenses();
@@ -74,4 +75,26 @@ export const removeExpense = async (id: string) => {
   setData('expenses', expenses);
   EventEmitter.emit('data-change', expenses);
   return await getExpenses();
+};
+
+export const filterExpenses = (expenses: IExpense[], filters: IFilterObj) => {
+  return expenses?.filter(item => {
+    if (filters.title && !item.title.toLowerCase().includes(filters.title)) {
+      return false;
+    }
+    if (filters.minAmount && item.amount < filters.minAmount) {
+      return false;
+    }
+    if (filters.maxAmount && item.amount > filters.maxAmount) {
+      return false;
+    }
+    if (filters.fromDate && new Date(item.date) < filters.fromDate) {
+      return false;
+    }
+    if (filters.toDate && new Date(item.date) > filters.toDate) {
+      return false;
+    }
+
+    return true;
+  });
 };

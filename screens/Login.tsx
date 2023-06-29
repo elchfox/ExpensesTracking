@@ -6,7 +6,7 @@ import Button from '../componentes/Button';
 import Input from '../componentes/Input';
 import {getUsers} from '../helpers/UsersData';
 import {IUser} from '../types';
-var s = require('../styles');
+import style from '../styles';
 
 const Login: React.FC<any> = ({navigation}) => {
   const [username, setUserName] = useState<string>('');
@@ -18,22 +18,19 @@ const Login: React.FC<any> = ({navigation}) => {
     };
     let users: IUser[] = await getUsers();
     const userExist = users.find(item => item.id === user.id);
-    if (!userExist) {
-      users.push(user);
-    } else {
-      users.push(user);
-    }
+    !userExist && users.push(user);
     AsyncStorage.setItem('users', JSON.stringify(users));
     AsyncStorage.setItem('currentUser', JSON.stringify(user));
     navigation.dispatch(StackActions.replace('Home'));
   };
 
   return (
-    <View style={{flex: 1, padding: 60, backgroundColor: 'white'}}>
-      <View style={s.centerVH}>
+    <View style={style.wapperScreen}>
+      <View style={style.centerVH}>
         <Input
           onChangeText={text => setUserName(text)}
           placeholder="Enter Name"
+          style={{width: '100%'}}
         />
       </View>
       <View style={{alignItems: 'center'}}>
