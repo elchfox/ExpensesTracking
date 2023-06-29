@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {View} from 'react-native';
-import Expenses from '../componentes/Expense/Expenses';
 import TopBanner from '../componentes/TopBanner';
 import {InfoContext} from '../helpers/useContext';
+import Expenses from '../componentes/Expense/Expenses';
 
 const Main = () => {
   const {allInfoExpenses} = useContext(InfoContext);

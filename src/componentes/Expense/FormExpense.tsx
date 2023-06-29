@@ -2,14 +2,11 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
-import {
-  createExpense,
-  editExpense
-} from '../../helpers/ExpensesData';
-import style from '../../styles';
-import { IExpense } from '../../types';
+import React, {useState} from 'react';
+import {Text, View} from 'react-native';
+import {createExpense, editExpense} from '../../helpers/ExpensesData';
+import style from '../../../styles';
+import {IExpense} from '../../types';
 import Button from '../Button';
 import Input from '../Input';
 import ModalCustom from '../ModalCustom';
@@ -28,7 +25,6 @@ const FormExpense: React.FC<IExpenseProps> = props => {
   const {data} = props;
   const [expense, setExpense] = useState<IExpense>({...initData, ...data});
   const [showDate, setShowDate] = useState<boolean>(false);
-  
 
   const onCreate = async () => {
     if (expense.id) {
@@ -68,16 +64,19 @@ const FormExpense: React.FC<IExpenseProps> = props => {
           width: '100%',
         }}>
         <Input
-          placeholder="Title"
-          defaultValue={expense?.title}
+          label="Title"
+          value={expense?.title}
           onChangeText={text => onChangeField('title', text)}
         />
         <Input
-          placeholder="Amount"
-          defaultValue={expense.amount > 0 ? expense?.amount?.toString() : ''}
+          label="Amount"
+          keyboardType="numeric"
+          value={expense.amount > 0 ? expense?.amount?.toString() : ''}
           onChangeText={text => onChangeField('amount', Number(text))}
         />
-        <Text style={[style.textInput,{color:"black"}]} onPress={() => setShowDate(true)}>
+        <Text
+          style={[style.textInput, {color: 'black'}]}
+          onPress={() => setShowDate(true)}>
           {moment(expense?.date).format('DD.MM.YYYY')}
         </Text>
         {showDate && (

@@ -1,19 +1,18 @@
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import React, {useContext} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {price} from '../../helpers';
-import {IExpense} from '../../types';
 import {InfoContext} from '../../helpers/useContext';
+import {IExpense} from '../../types';
 
 interface IExpenseProps extends IExpense {
   showDate?: boolean;
+  lastItem?: boolean;
   onDelete?: (id?: string) => void;
 }
 const Expense: React.FC<IExpenseProps> = props => {
-  const navigation = useNavigation<NavigationProp<any>>();
-  const {amount, date, title, id, showDate, userId, onDelete} = props;
+  const {amount, date, title, id, showDate, userId, onDelete, lastItem} = props;
   const {setDataExpense, setModalFormExpenses} = useContext(InfoContext);
 
   return (
@@ -36,8 +35,10 @@ const Expense: React.FC<IExpenseProps> = props => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          borderBottomColor: 'black',
+          borderBottomWidth: lastItem ? 0 : 0.5,
         }}>
-        <Text style={{fontSize:16,color:"#3E3E3E"}}>{title}</Text>
+        <Text style={{fontSize: 16, color: '#3E3E3E'}}>{title}</Text>
         <View
           style={{
             flexDirection: 'row',

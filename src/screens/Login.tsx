@@ -4,9 +4,9 @@ import React, {useState} from 'react';
 import {View} from 'react-native';
 import Button from '../componentes/Button';
 import Input from '../componentes/Input';
-import {getUsers} from '../helpers/UsersData';
+import style from '../../styles';
 import {IUser} from '../types';
-import style from '../styles';
+import {getUsers} from '../helpers/UsersData';
 
 const Login: React.FC<any> = ({navigation}) => {
   const [username, setUserName] = useState<string>('');
@@ -26,12 +26,19 @@ const Login: React.FC<any> = ({navigation}) => {
 
   return (
     <View style={style.wapperScreen}>
-      <View style={style.centerVH}>
-        <Input
-          onChangeText={text => setUserName(text)}
-          placeholder="Enter Name"
-          style={{width: '100%'}}
-        />
+      <View style={{flex: 1, justifyContent: 'center', gap: 30, width: '100%'}}>
+        <View
+          style={{
+            gap: 15,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Input
+            onChangeText={text => setUserName(text)}
+            label="Enter Name"
+            value={username}
+          />
+        </View>
       </View>
       <View style={{alignItems: 'center'}}>
         <Button text="Login" onPress={onLogin} />

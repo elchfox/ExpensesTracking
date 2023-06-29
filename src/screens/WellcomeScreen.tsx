@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, View} from 'react-native';
-import style from '../styles';
+import style from '../../styles';
+
 
 const WellcomeScreen = () => {
   return (

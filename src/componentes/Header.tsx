@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from 'react';
-import {Text, View} from 'react-native';
-import {IUser} from '../types';
+import React, { useEffect, useState } from 'react';
+import { Text } from 'react-native';
+import { IUser } from '../types';
 
-const Header: React.FC<any> = props => {
+const HeaderTopBar = () => {
   const [username, setUsername] = useState<string>('');
   useEffect(() => {
     init();
@@ -21,4 +21,4 @@ const Header: React.FC<any> = props => {
   return <Text style={{fontWeight: 'bold'}}>{username}</Text>;
 };
 
-export default Header;
+export default HeaderTopBar;

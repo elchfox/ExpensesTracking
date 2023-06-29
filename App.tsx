@@ -2,13 +2,14 @@ import React, {useEffect, useState} from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Header from './componentes/Header';
-import {checkUserExist} from './helpers/UsersData';
-import {InfoContext} from './helpers/useContext';
-import Home from './screens/Home';
-import Login from './screens/Login';
-import WellcomeScreen from './screens/WellcomeScreen';
-import {IExpense, IInfoAboutExpense} from './types';
+import HeaderTopBar from './src/componentes/Header';
+import {currentUser, getUser} from './src/helpers/UsersData';
+import {InfoContext} from './src/helpers/useContext';
+
+import Home from './src/screens/Home';
+import Login from './src/screens/Login';
+import WellcomeScreen from './src/screens/WellcomeScreen';
+import {IExpense, IInfoAboutExpense, IUser} from './src/types';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,8 +24,13 @@ function App({}): JSX.Element {
   const [modalFormExpenses, setModalFormExpenses] = useState<boolean>(false);
   const [dataExpense, setDataExpense] = useState<IExpense>();
   const init = async () => {
-    let user: boolean = await checkUserExist();
-    setRouteName(user ? 'Home' : 'Login');
+    let user: IUser = await getUser();
+
+    // if (user.id) {
+    //   currentUser.id = user.id;
+    //   currentUser.username = user.username;
+    // }
+    setRouteName(user.id ? 'Home' : 'Login');
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
@@ -61,7 +67,7 @@ function App({}): JSX.Element {
             name="Home"
             component={Home}
             options={{
-              headerTitle: props => <Header {...props} />,
+              headerTitle: props => <HeaderTopBar />,
               headerShadowVisible: false,
             }}
           />

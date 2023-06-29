@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import FormExpense from '../componentes/Expense/FormExpense';
-import EventEmitter from '../helpers/EventEmitter';
-import {getExpensesAndAllInfo} from '../helpers/ExpensesData';
 import {InfoContext} from '../helpers/useContext';
+import EventEmitter from '../helpers/EventEmitter';
+import {IInfoAboutExpense} from '../types';
+import {getExpensesAndAllInfo} from '../helpers/ExpensesData';
+import FormExpense from '../componentes/Expense/FormExpense';
 import Tabs from '../tabs';
-import {IExpense, IInfoAboutExpense} from '../types';
 
 const Home = () => {
   const {
@@ -22,8 +22,7 @@ const Home = () => {
   }, []);
 
   const init = async () => {
-    console.log('gfdgdfg');
-    let allInfoExpenses: IInfoAboutExpense = await getExpensesAndAllInfo();
+    const allInfoExpenses: IInfoAboutExpense = await getExpensesAndAllInfo();
     setAllInfoExpenses(allInfoExpenses);
     setExpenses(allInfoExpenses.expenses);
   };

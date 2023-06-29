@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, {useContext, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Expense from '.';
 import {filterExpenses, removeExpense} from '../../helpers/ExpensesData';
@@ -16,6 +16,7 @@ const Expenses = () => {
     fromDate: allInfoExpenses.minDate,
     toDate: allInfoExpenses.maxDate,
   });
+
   let currentDate = '';
 
   const onDelete = (id?: string) => {
@@ -29,13 +30,7 @@ const Expenses = () => {
       <View style={{padding: 15}}>
         <TouchableOpacity
           onPress={() => setFilterVisible(true)}
-          style={{
-            alignSelf: 'flex-end',
-            borderRadius: 30,
-            padding: 5,
-            paddingHorizontal: 15,
-            backgroundColor: '#D9D9D9',
-          }}>
+          style={styles.filterBtn}>
           <Text style={{color: 'black', fontWeight: 'bold'}}>
             <Icon name="sliders" /> Filter
           </Text>
@@ -56,20 +51,39 @@ const Expenses = () => {
       )}
       <FlatList
         contentContainerStyle={{paddingBottom: 30}}
-        ItemSeparatorComponent={() => (
-          <View style={{width: '100%', height: 1, backgroundColor: 'black'}} />
-        )}
         data={filterExpenses(allInfoExpenses.expenses, filters)}
-        renderItem={({item}) => {
-          let showDate = currentDate !== moment(item.date).format('MM.DD.YYYY');
+        renderItem={({item, index}) => {
+          let showDate =
+            index === 0 ||
+            currentDate !== moment(item.date).format('MM.DD.YYYY');
+
           if (showDate) {
             currentDate = moment(item.date).format('MM.DD.YYYY');
           }
-          return <Expense {...item} showDate={showDate} onDelete={onDelete} />;
+          return (
+            <Expense
+              {...item}
+              showDate={showDate}
+              lastItem={
+                index ===
+                filterExpenses(allInfoExpenses.expenses, filters).length - 1
+              }
+              onDelete={onDelete}
+            />
+          );
         }}
       />
     </>
   );
 };
 
+const styles = StyleSheet.create({
+  filterBtn: {
+    alignSelf: 'flex-end',
+    borderRadius: 30,
+    padding: 5,
+    paddingHorizontal: 15,
+    backgroundColor: '#D9D9D9',
+  },
+});
 export default Expenses;

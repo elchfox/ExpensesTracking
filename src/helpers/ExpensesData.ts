@@ -17,7 +17,6 @@ export const getMinMaxDate = async (expenses: IExpense[]) => {
 };
 export const getExpensesAndAllInfo = async () => {
   let expenses = await getExpenses();
-  console.log(expenses,"hghfg")
   let totalExpenses = expenses.reduce((prev, current) => {
     prev += current.amount;
     return prev;
@@ -41,7 +40,6 @@ export const findExpenseById = async (id: string) => {
 export const createExpense = async (data: IExpense) => {
   let expenses: IExpense[] = await getListOfExpenses();
   let user: IUser = await getData('currentUser');
-  console.log(user);
   expenses.push({
     ...data,
     id: new Date().getTime().toString(),

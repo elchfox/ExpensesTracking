@@ -1,5 +1,5 @@
 var React = require("react-native");
-const COLORS = require("./constants/theme");
+const COLORS = require("./src/constants/theme");
 var {
   StyleSheet
 } = React;
