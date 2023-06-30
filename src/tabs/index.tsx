@@ -8,9 +8,9 @@ import TabBarCustomButton from './TabBarCustomButton';
 
 const Tab = createBottomTabNavigator();
 interface ITabs {
-  onPressModal:()=> void;
+  onPressModal: () => void;
 }
-const Tabs:React.FC<ITabs> = (props) => {
+const Tabs: React.FC<ITabs> = props => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -30,15 +30,14 @@ const Tabs:React.FC<ITabs> = (props) => {
       <Tab.Screen
         name="FormExpense"
         component={FormExpense}
-        listeners={()=> ({
-            tabPress:(e)=>{
-              e.preventDefault();
-              props.onPressModal()
-            }
+        listeners={() => ({
+          tabPress: e => {
+            e.preventDefault();
+            props.onPressModal();
+          },
         })}
         options={{
           tabBarButton: props => <FloatButton value="Profile" {...props} />,
-          
         }}
       />
       <Tab.Screen

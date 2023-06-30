@@ -47,6 +47,7 @@ export const createExpense = async (data: IExpense) => {
     userId: currentUser.id,
     amount: Number(data.amount),
   });
+  
   return dataChange(expenses);
 };
 
@@ -73,7 +74,7 @@ export const removeExpense = async (id: string) => {
 };
 
 const dataChange = async (expenses: IExpense[]) => {
-  setData('expenses', expenses);
+  await setData('expenses', expenses);
   EventEmitter.emit('data-change', expenses);
   return await getExpenses();
 };

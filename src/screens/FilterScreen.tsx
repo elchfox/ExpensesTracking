@@ -1,11 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Input, {DisplayTextInput} from '../componentes/Input';
-
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import Button from '../componentes/Button';
-
 import ModalCustom from '../componentes/ModalCustom';
 import {IFilters} from '../types';
 const initialData = {};
@@ -23,8 +21,9 @@ const FilterScreen: React.FC<IFilter> = props => {
     'fromDate' | 'toDate' | null
   >(null);
 
-  let [filterObject, setFilterObject] = useState<IFilters>(props.filterObject);
-
+  const [filterObject, setFilterObject] = useState<IFilters>(
+    props.filterObject,
+  );
   const onChangeField = async (name: string, value: string | number | Date) => {
     setFilterObject({
       ...filterObject,

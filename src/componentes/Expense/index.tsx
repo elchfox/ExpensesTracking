@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, {useContext} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {price} from '../../helpers';
 import {InfoContext} from '../../helpers/useContext';
@@ -18,8 +18,13 @@ const Expense: React.FC<IExpenseProps> = props => {
   return (
     <>
       {showDate && (
-        <View style={{backgroundColor: '#f3f3f3', padding: 8}}>
-          <Text style={{color: '#5B58AD'}}>
+        <View
+          style={{
+            backgroundColor: '#F4EEEE',
+            paddingHorizontal: 15,
+            paddingVertical: 4,
+          }}>
+          <Text style={{color: 'black'}}>
             {moment(date).format('DD.MM.YYYY')}
           </Text>
         </View>
@@ -29,15 +34,12 @@ const Expense: React.FC<IExpenseProps> = props => {
           setDataExpense({amount, date, title, id, userId}),
             setModalFormExpenses(true);
         }}
-        style={{
-          padding: 16,
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottomColor: 'black',
-          borderBottomWidth: lastItem ? 0 : 0.5,
-        }}>
+        style={[
+          styles.expense,
+          {
+            borderBottomWidth: lastItem ? 0 : 0.5,
+          },
+        ]}>
         <Text style={{fontSize: 16, color: '#3E3E3E'}}>{title}</Text>
         <View
           style={{
@@ -55,4 +57,14 @@ const Expense: React.FC<IExpenseProps> = props => {
   );
 };
 
+const styles = StyleSheet.create({
+  expense: {
+    padding: 16,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomColor: 'black',
+  },
+});
 export default Expense;

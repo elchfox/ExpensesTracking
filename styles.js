@@ -6,7 +6,7 @@ var {
 const style = StyleSheet.create({
   wapperScreen: {
     flex: 1,
-    padding: 60,
+    padding: 32,
     backgroundColor: 'white'
   },
   centerVH: {
@@ -43,7 +43,7 @@ const style = StyleSheet.create({
     left: 0,
     bottom: 0,
     // justifyContent: 'center',
-    padding: 15,
+    padding: 24,
     flexDirection: 'column',
     gap: 50,
     backgroundColor: 'white',

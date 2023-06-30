@@ -8,18 +8,21 @@ interface IModal {
   children: ReactNode;
   onClose: () => void;
   leftAction?: ReactNode;
+  transparent?:boolean
 }
 const ModalCustom: React.FC<IModal> = props => {
+  const {children,onClose,title,leftAction,transparent = true} = props
+
   return (
     <Modal
       animationType="slide"
-      transparent={true}
+      transparent={transparent}
       visible={true}
-      onRequestClose={props.onClose}>
+      onRequestClose={onClose}>
       <TouchableOpacity
         activeOpacity={1}
         style={{flex: 1}}
-        onPress={props.onClose}>
+        onPress={onClose}>
         <View
           style={style.modalInner}
           onStartShouldSetResponder={event => true}
@@ -27,11 +30,11 @@ const ModalCustom: React.FC<IModal> = props => {
             e.stopPropagation();
           }}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            {props.leftAction}
-            <Text style={{color: 'black', fontSize: 20}}>{props.title}</Text>
-            <Icon onPress={props.onClose} name={'close'} size={20} />
+            {leftAction}
+            <Text style={{color: 'black', fontSize: 20}}>{title}</Text>
+            <Icon onPress={onClose} name={'close'} size={20} />
           </View>
-          {props.children}
+          {children}
         </View>
       </TouchableOpacity>
     </Modal>

@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HeaderTopBar from './src/componentes/Header';
-import {currentUser, getUser} from './src/helpers/UsersData';
-import {InfoContext} from './src/helpers/useContext';
+import { currentUser, getUser } from './src/helpers/UsersData';
+import { InfoContext } from './src/helpers/useContext';
 
-import {StatusBar} from 'react-native';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from './src/constants/theme';
 import Home from './src/screens/Home';
 import Login from './src/screens/Login';
 import WellcomeScreen from './src/screens/WellcomeScreen';
-import {IExpense, IInfoAboutExpense, IUser} from './src/types';
+import { IExpense, IInfoAboutExpense, IUser } from './src/types';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +28,7 @@ const App = () => {
   const [dataExpense, setDataExpense] = useState<IExpense>();
   const init = async () => {
     let user: IUser = await getUser();
-    if (user.id) {
+    if (user?.id) {
       currentUser.id = user.id;
       currentUser.username = user.username;
     }
@@ -73,7 +73,6 @@ const App = () => {
               component={Home}
               options={{
                 header: props => <HeaderTopBar />,
-
               }}
             />
           </Stack.Navigator>

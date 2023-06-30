@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {InfoContext} from '../helpers/useContext';
-import EventEmitter from '../helpers/EventEmitter';
-import {IInfoAboutExpense} from '../types';
-import {getExpensesAndAllInfo} from '../helpers/ExpensesData';
+import React, { useContext, useEffect } from 'react';
 import FormExpense from '../componentes/Expense/FormExpense';
+import EventEmitter from '../helpers/EventEmitter';
+import { getExpensesAndAllInfo } from '../helpers/ExpensesData';
+import { InfoContext } from '../helpers/useContext';
 import Tabs from '../tabs';
+import { IInfoAboutExpense } from '../types';
 
 const Home = () => {
   const {

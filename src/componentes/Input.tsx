@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Animated,
   StyleSheet,
@@ -7,7 +7,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import style from '../../styles';
 interface IInput extends TextInputProps {
   label: string;
 }
@@ -125,5 +124,5 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
 });
-export {DisplayTextInput};
+export { DisplayTextInput };
 export default Input;
