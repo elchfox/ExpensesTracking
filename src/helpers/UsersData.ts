@@ -6,6 +6,8 @@ export const getUser = async () => {
   return user
 };
 export const userLogout = async () => {
+  removeData('expenses');
+  removeData('users');
   removeData('currentUser');
 };
 export const getUsers = async () =>  {
